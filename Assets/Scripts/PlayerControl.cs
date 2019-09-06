@@ -68,24 +68,11 @@ public class PlayerControl : MonoBehaviour {
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityHorizontal, ref velocityHorizontal, m_MovementSmoothing);
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityVertical, ref velocityVertical, m_MovementSmoothing);
 
-        //因为动画没导入 先写个反转意思一下
-        if (horizontalMove > 0 && !Player_FacingRight)
-            Flip();
-        if (horizontalMove < 0 && Player_FacingRight)
-            Flip();
+        
     }
 
 
     
-    private void Flip()
-    {
-        // Switch the way the player is labelled as facing.
-        Player_FacingRight = !Player_FacingRight;
-
-        // Multiply the player's x local scale by -1.
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
-    }
+    
     
 }
