@@ -25,14 +25,14 @@ public class PlayerControl : MonoBehaviour {
 
 
     //人物朝向
-    private bool Player_FacingRight = false;
-    private bool Player_FacingLeft = false;
-    private bool Player_FacingUp = false;
-    private bool Player_FacingDown = false;
+    private int Player_Facing = 0; //0,1,2,3,4   发呆，南，北，西，东
 
     //smoothdamp函数的一个固定变量
     private Vector3 velocityHorizontal = Vector3.zero;
     private Vector3 velocityVertical = Vector3.zero;
+
+    //动画
+    public Animator anim;
 
 
 
@@ -51,12 +51,26 @@ public class PlayerControl : MonoBehaviour {
     private void FixedUpdate()
     {
         PlayerMove();
+        RefreshAnimation();
     }
 
     private void PlayerMoveInput()
     {
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         verticalMove = Input.GetAxisRaw("Vertical") * runSpeed;
+        if (horizontalMove > 0)
+            Player_Facing = 4;
+        if (horizontalMove < 0)
+            Player_Facing = 3;
+        if (Player_Facing == 0)
+        {
+            if (verticalMove > 0)
+                Player_Facing = 2;
+            if (verticalMove < 0)
+                Player_Facing = 1;
+        }
+        
+            
     }
 
     private void PlayerMove()
@@ -68,7 +82,15 @@ public class PlayerControl : MonoBehaviour {
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityHorizontal, ref velocityHorizontal, m_MovementSmoothing);
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityVertical, ref velocityVertical, m_MovementSmoothing);
 
-        
+        print("#########");
+        print(Player_Rigidbody2D.velocity.y);
+        print(Player_Rigidbody2D.velocity.x);
+    }
+
+    private void RefreshAnimation()
+    {
+        anim.SetInteger("Player_Facing", Player_Facing);
+        Player_Facing = 0;
     }
 
 
