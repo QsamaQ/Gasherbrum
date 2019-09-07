@@ -24,6 +24,10 @@ public class PlayerControl : MonoBehaviour {
     private float verticalMove = 0f;
 
 
+    //攻击
+    private bool isForthAttack = false;
+
+
     //人物朝向
     private int Player_Facing = 0; //0,1,2,3,4   发呆，南，北，西，东
 
@@ -45,13 +49,16 @@ public class PlayerControl : MonoBehaviour {
     void Update () {
 
         PlayerMoveInput();
+        
 
 	}
 
     private void FixedUpdate()
     {
-        PlayerMove();
         RefreshAnimation();
+        PlayerMove();
+        
+        Attack(isForthAttack);
     }
 
     private void PlayerMoveInput()
@@ -69,6 +76,13 @@ public class PlayerControl : MonoBehaviour {
             if (verticalMove < 0)
                 Player_Facing = 1;
         }
+
+        //先写个向前攻击
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            isForthAttack = true;
+        }
         
             
     }
@@ -82,6 +96,9 @@ public class PlayerControl : MonoBehaviour {
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityHorizontal, ref velocityHorizontal, m_MovementSmoothing);
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityVertical, ref velocityVertical, m_MovementSmoothing);
 
+
+
+
         print("#########");
         print(Player_Rigidbody2D.velocity.y);
         print(Player_Rigidbody2D.velocity.x);
@@ -90,10 +107,14 @@ public class PlayerControl : MonoBehaviour {
     private void RefreshAnimation()
     {
         anim.SetInteger("Player_Facing", Player_Facing);
+        anim.SetBool("isForthAttack", isForthAttack);
         Player_Facing = 0;
     }
 
-
+    private void Attack(bool isAttack)
+    {
+        isForthAttack = false;
+    }
     
     
     
