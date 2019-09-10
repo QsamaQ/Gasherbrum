@@ -25,7 +25,7 @@ public class PlayerControl : MonoBehaviour {
 
 
     //攻击
-    private bool isForthAttack = false;
+    private bool isAttack = false;
 
 
     //人物朝向
@@ -58,7 +58,7 @@ public class PlayerControl : MonoBehaviour {
         RefreshAnimation();
         PlayerMove();
         
-        Attack(isForthAttack);
+        Attack(ref isAttack);
     }
 
     private void PlayerMoveInput()
@@ -77,11 +77,21 @@ public class PlayerControl : MonoBehaviour {
                 Player_Facing = 1;
         }
 
+
+        if (Player_Facing == 1 && Input.GetKeyUp(KeyCode.DownArrow))
+            Player_Facing = 0;
+        if (Player_Facing == 2 && Input.GetKeyUp(KeyCode.UpArrow))
+            Player_Facing = 0;
+        if (Player_Facing == 3 && Input.GetKeyUp(KeyCode.LeftArrow))
+            Player_Facing = 0;
+        if (Player_Facing == 4 && Input.GetKeyUp(KeyCode.RightArrow))
+            Player_Facing = 0;
         //先写个向前攻击
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            isForthAttack = true;
+            isAttack = true;
+            print("#######3");
         }
         
             
@@ -99,21 +109,19 @@ public class PlayerControl : MonoBehaviour {
 
 
 
-        print("#########");
-        print(Player_Rigidbody2D.velocity.y);
-        print(Player_Rigidbody2D.velocity.x);
+       
     }
 
     private void RefreshAnimation()
     {
         anim.SetInteger("Player_Facing", Player_Facing);
-        anim.SetBool("isForthAttack", isForthAttack);
-        Player_Facing = 0;
+        anim.SetBool("isAttack", isAttack);
+        
     }
 
-    private void Attack(bool isAttack)
+    private void Attack(ref bool isAttack)
     {
-        isForthAttack = false;
+        isAttack = false;
     }
     
     
