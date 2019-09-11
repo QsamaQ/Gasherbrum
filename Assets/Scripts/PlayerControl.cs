@@ -65,23 +65,23 @@ public class PlayerControl : MonoBehaviour {
 
     private void PlayerMoveInput()
     {
-        
+
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         verticalMove = Input.GetAxisRaw("Vertical") * runSpeed;
+
+        if (verticalMove > 0)
+            Player_Facing = 2;
+
+        if (verticalMove < 0)
+            Player_Facing = 1;
+
         if (horizontalMove > 0)
             Player_Facing = 4;
+
         if (horizontalMove < 0)
             Player_Facing = 3;
-        if (Player_Facing == 0)
-        {
-            if (verticalMove > 0)
-                Player_Facing = 2;
-            if (verticalMove < 0)
-                Player_Facing = 1;
-        }
 
 
-        
         //先写个向前攻击
 
         if (Input.GetKeyDown(KeyCode.X))
@@ -89,8 +89,8 @@ public class PlayerControl : MonoBehaviour {
             isAttack = true;
             print("#######3");
         }
-        
-            
+
+
     }
 
     private void PlayerMove()
@@ -102,12 +102,8 @@ public class PlayerControl : MonoBehaviour {
         // And then smoothing it out and applying it to the character
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityHorizontal, ref velocityHorizontal, m_MovementSmoothing);
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityVertical, ref velocityVertical, m_MovementSmoothing);
-
         if (prepos == gameObject.transform.position)
             Player_Facing = 0;
-        
-
-       
     }
 
     private void RefreshAnimation()
