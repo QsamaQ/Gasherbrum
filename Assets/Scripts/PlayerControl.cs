@@ -23,6 +23,8 @@ public class PlayerControl : MonoBehaviour {
     private float horizontalMove = 0f;
     private float verticalMove = 0f;
 
+    private Vector3 prepos=Vector3.zero;
+
 
     //攻击
     private bool isAttack = false;
@@ -63,6 +65,7 @@ public class PlayerControl : MonoBehaviour {
 
     private void PlayerMoveInput()
     {
+        
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         verticalMove = Input.GetAxisRaw("Vertical") * runSpeed;
         if (horizontalMove > 0)
@@ -78,14 +81,7 @@ public class PlayerControl : MonoBehaviour {
         }
 
 
-        if (Player_Facing == 1 && Input.GetKeyUp(KeyCode.DownArrow))
-            Player_Facing = 0;
-        if (Player_Facing == 2 && Input.GetKeyUp(KeyCode.UpArrow))
-            Player_Facing = 0;
-        if (Player_Facing == 3 && Input.GetKeyUp(KeyCode.LeftArrow))
-            Player_Facing = 0;
-        if (Player_Facing == 4 && Input.GetKeyUp(KeyCode.RightArrow))
-            Player_Facing = 0;
+        
         //先写个向前攻击
 
         if (Input.GetKeyDown(KeyCode.X))
@@ -99,6 +95,7 @@ public class PlayerControl : MonoBehaviour {
 
     private void PlayerMove()
     {
+        prepos = gameObject.transform.position;
         // Move the character by finding the target velocity
         Vector3 targetVelocityHorizontal = new Vector2(horizontalMove*Time.fixedDeltaTime * 10f, Player_Rigidbody2D.velocity.y);
         Vector3 targetVelocityVertical = new Vector2(Player_Rigidbody2D.velocity.x, verticalMove * Time.fixedDeltaTime * 10f);
@@ -106,8 +103,9 @@ public class PlayerControl : MonoBehaviour {
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityHorizontal, ref velocityHorizontal, m_MovementSmoothing);
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityVertical, ref velocityVertical, m_MovementSmoothing);
 
-
-
+        if (prepos == gameObject.transform.position)
+            Player_Facing = 0;
+        
 
        
     }
