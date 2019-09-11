@@ -23,9 +23,11 @@ public class PlayerControl : MonoBehaviour {
     private float horizontalMove = 0f;
     private float verticalMove = 0f;
 
+    private Vector3 prepos=Vector3.zero;
+
 
     //攻击
-    private bool isForthAttack = false;
+    private bool isAttack = false;
 
 
     //人物朝向
@@ -58,11 +60,12 @@ public class PlayerControl : MonoBehaviour {
         RefreshAnimation();
         PlayerMove();
         
-        Attack(isForthAttack);
+        Attack(ref isAttack);
     }
 
     private void PlayerMoveInput()
     {
+        
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         verticalMove = Input.GetAxisRaw("Vertical") * runSpeed;
         if (horizontalMove > 0)
@@ -77,11 +80,14 @@ public class PlayerControl : MonoBehaviour {
                 Player_Facing = 1;
         }
 
+
+        
         //先写个向前攻击
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            isForthAttack = true;
+            isAttack = true;
+            print("#######3");
         }
         
             
@@ -89,6 +95,7 @@ public class PlayerControl : MonoBehaviour {
 
     private void PlayerMove()
     {
+        prepos = gameObject.transform.position;
         // Move the character by finding the target velocity
         Vector3 targetVelocityHorizontal = new Vector2(horizontalMove*Time.fixedDeltaTime * 10f, Player_Rigidbody2D.velocity.y);
         Vector3 targetVelocityVertical = new Vector2(Player_Rigidbody2D.velocity.x, verticalMove * Time.fixedDeltaTime * 10f);
@@ -96,24 +103,23 @@ public class PlayerControl : MonoBehaviour {
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityHorizontal, ref velocityHorizontal, m_MovementSmoothing);
         Player_Rigidbody2D.velocity = Vector3.SmoothDamp(Player_Rigidbody2D.velocity, targetVelocityVertical, ref velocityVertical, m_MovementSmoothing);
 
+        if (prepos == gameObject.transform.position)
+            Player_Facing = 0;
+        
 
-
-
-        print("#########");
-        print(Player_Rigidbody2D.velocity.y);
-        print(Player_Rigidbody2D.velocity.x);
+       
     }
 
     private void RefreshAnimation()
     {
         anim.SetInteger("Player_Facing", Player_Facing);
-        anim.SetBool("isForthAttack", isForthAttack);
-        Player_Facing = 0;
+        anim.SetBool("isAttack", isAttack);
+        
     }
 
-    private void Attack(bool isAttack)
+    private void Attack(ref bool isAttack)
     {
-        isForthAttack = false;
+        isAttack = false;
     }
     
     
